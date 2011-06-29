@@ -1,39 +1,64 @@
 GemStacker = LibStub('AceAddon-3.0'):NewAddon('GemStacker','AceConsole-3.0','AceEvent-3.0');
 local core = GemStacker;
+core.gems = {};
 
 function core:OnInitialize()	
-
+	print('GemStacker: Initialized');
 end
 
 function core:OnEnable()
-	self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED','StackGem');
-end
-
-function core:StackGem(unitID,spell,rank,lineID,spellID)
-	--should receive something like "player","Reckless Ember Topaz","",2,73369
-	if(unitID ~= 'player') then return end;
-	if(not gems[spellID]) then return end;
+	print('GemStacker: Enabled');
 	
-	--go through all bag slots and find all stacks of this gem type.
-	--local sourceStack = {};
-	--local destStack = {};
-	--for all of the bags
-	--	for all of the slots
-	--		if(gems[spellID] == GetContainerItemID(1,11)) then
-	--			_,count = GetContainerItemInfo(container, slot)
-	--			if(count == 1) then
-	--				sourceStack = {container,slot);
-	--			elseif(count < 20) then
-	--				destStack = {container,slot);
-	--			end
-	--		end
-	--	end
-	--end
-
-	--if there is a stack of 1 and a stack of < 20, combine them
-	PickupContainerItem(sourceStack[0],sourceStack[1])
-	PickupContainerItem(destStack[0],destStack[1])
+	core.gems['Puissant Dream Emerald'] = true;
+	
+	self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED','FindGemCast');
 end
 
---BAG_UPDATE - container
---SPELL_CAST_START
+function core:FindGemCast(_,unitId,spell,...)
+	print('GemStacker: Casted ',spell);
+	--should receive something like "player","Reckless Ember Topaz","",2,73369
+	if(unitId ~= 'player') then return end;
+	print('GemStacker: Player casted spell.');
+	if(not core.gems[spell]) then return end;
+	print('GemStacker: Gem found');
+	
+	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
+	for bag = 0,1 do
+		for slot = 1,GetContainerNumSlots(bag) do
+			print('GemStacker: Checking ',bag,slot);
+			itemId = GetContainerItemID(bag,slot)
+			if(itemId) then
+				itemName = GetItemInfo(itemId);
+				if(spell == itemName) then
+					print('GemStacker: Found gem in bag: ',bag,slot);
+					local _,count = GetContainerItemInfo(bag,slot);
+					if(count == 1 and sourceContainer < 0) then
+						print('GemStacker: Found source');
+						sourceContainer = bag;
+						sourceSlot = slot;
+					elseif(count < 20 and (count > 1 or destContainer < 0)) then
+						print('GemStacker: Found dest');
+						destContainer = bag;
+						destSlot = slot;
+					end
+				end
+			else
+				print('GemStacker: ',bag,slot,'emptry');
+			end
+		end
+	end
+
+	if(sourceContainer < 0 and destContainer < 0) then
+		print('GemStacker: Stacking');
+		PickupContainerItem(sourceContainer,sourceSlot);
+		PickupContainerItem(destContainer,destSlot)
+	end
+	
+	--self:RegisterEvent('BAG_UPDATE','StackGem');
+end
+
+function core:StackGem(...)
+	
+	
+	self:UnregisterEvent('BAG_UPDATE');
+end
