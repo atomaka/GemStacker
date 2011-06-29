@@ -6,12 +6,10 @@ function core:OnInitialize()
 end
 
 function core:OnEnable()
-	--use chat_msg_loot later
 	self:RegisterEvent('CHAT_MSG_LOOT','StackGems');
 end
 
 function core:StackGems(_,message)
-	--should receive something like "player","Reckless Ember Topaz","",2,73369
 	if(not string.find(message,'You create')) then return end;
 	local gem = message:match("%[(.-)%]");
 
