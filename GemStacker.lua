@@ -14,7 +14,7 @@ function core:StackGems(_,message)
 	local gem = message:match("%[(.-)%]");
 
 	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
-	for bag = 0,4 do
+	for bag = 0,NUM_BAG_SLOTS do
 		for slot = 1,GetContainerNumSlots(bag) do
 			local itemId = GetContainerItemID(bag,slot)
 			if(itemId) then
