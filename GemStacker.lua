@@ -16,10 +16,10 @@ function core:StackGems(_,message)
 	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
 	for bag = 0,4 do
 		for slot = 1,GetContainerNumSlots(bag) do
-			itemId = GetContainerItemID(bag,slot)
+			local itemId = GetContainerItemID(bag,slot)
 			if(itemId) then
-				itemName = GetItemInfo(itemId);
-				if(gem == itemName) then
+				local itemName,_,_,_,_,_,_,maxStack = GetItemInfo(itemId);
+				if(gem == itemName and maxStack ~= 1) then
 					local _,count = GetContainerItemInfo(bag,slot);
 					if(count == 1 and sourceContainer < 0) then
 						sourceContainer = bag;
