@@ -6,13 +6,12 @@ function core:OnInitialize()
 end
 
 function core:OnEnable()
-	self:RegisterEvent('CHAT_MSG_LOOT','StackGems')
+	self:RegisterEvent('CHAT_MSG_TRADESKILLS','StackGems')
 end
 
 function core:StackGems(_,message)
-	--LOOT_ITEM_CREATED_SELF = "You create: %s.";
-	print('stack gems')
-	--local gem = message:match(LOOT_ITEM_CREATED_SELF)
+	--LOOT_ITEM_CREATED_SELF = "You create: %s.";  /dump LOOT_ITEM_CREATED_SELF:gsub("%%s", "(.-)")
+	local gem = message:match(LOOT_ITEM_CREATED_SELF:gsub("%%s", "(.-)"))
 	print('found gem',gem)
 
 	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
