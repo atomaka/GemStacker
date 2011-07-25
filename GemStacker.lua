@@ -12,16 +12,13 @@ function core:OnEnable()
 end
 
 function core:TrackGems(_,message)
-	--LOOT_ITEM_CREATED_SELF = "You create: %s.";  /dump TRADESKILL_LOG_FIRSTPERSON:gsub("%%s", "(.-)")
 	lastGem = message:match(TRADESKILL_LOG_FIRSTPERSON:gsub("%%s", "(.+)"))
 	if lastGem == nil or lastGem == "" then return end
 	
-	print('TrackGems found',lastGem)
 	self:RegisterEvent('ITEM_PUSH','StackGems')
 end
 
 function core:StackGems()
-	print('StackGems stacking',lastGem)
 	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
 	for bag = 0,NUM_BAG_SLOTS do
 		for slot = 1,GetContainerNumSlots(bag) do
@@ -42,7 +39,6 @@ function core:StackGems()
 		end
 	end
 
-	print(sourceContainer,sourceSlot,destContainer,destSlot)
 	if sourceContainer ~= -1 and destContainer ~= -1 then
 		PickupContainerItem(sourceContainer,sourceSlot)
 		PickupContainerItem(destContainer,destSlot)
