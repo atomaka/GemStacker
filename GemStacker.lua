@@ -12,7 +12,7 @@ function core:OnEnable()
 end
 
 function core:TrackGems(_,message)
-	lastGem = message:match(TRADESKILL_LOG_FIRSTPERSON:gsub("%%s", "(.+)"))
+	lastGem = message:match(TRADESKILL_LOG_FIRSTPERSON:gsub("%%%S-s", "(.+)"))
 	if lastGem == nil or lastGem == "" then return end
 	
 	self:RegisterEvent('ITEM_PUSH','StackGems')
