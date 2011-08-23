@@ -1,5 +1,5 @@
-GemStacker = LibStub('AceAddon-3.0'):NewAddon('GemStacker','AceConsole-3.0','AceEvent-3.0');
-local core = GemStacker;
+GemStacker = LibStub('AceAddon-3.0'):NewAddon('GemStacker','AceConsole-3.0','AceEvent-3.0')
+local core = GemStacker
 
 local lastGem = nil
 
@@ -13,18 +13,18 @@ end
 
 function core:TrackGems(_,message)
 	lastGem = message:match(TRADESKILL_LOG_FIRSTPERSON:gsub("%%%S-s", "(.+)"))
-	if lastGem == nil or lastGem == "" then return end
+	if lastGem == nil or lastGem == '' then return end
 	
 	self:RegisterEvent('ITEM_PUSH','StackGems')
 end
 
 function core:StackGems()
-	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1;
+	local sourceContainer,sourceSlot,destContainer,destSlot = -1,-1,-1,-1
 	for bag = 0,NUM_BAG_SLOTS do
 		for slot = 1,GetContainerNumSlots(bag) do
 			local itemId = GetContainerItemID(bag,slot)
 			if itemId then
-				local itemName,_,_,_,_,_,_,maxStack = GetItemInfo(itemId);
+				local itemName,_,_,_,_,_,_,maxStack = GetItemInfo(itemId)
 				if lastGem == itemName and maxStack ~= 1 then
 					local _,count = GetContainerItemInfo(bag,slot)
 					if count == 1 and sourceContainer < 0 then
