@@ -9,6 +9,8 @@ end
 
 function core:OnEnable()
 	self:RegisterEvent('CHAT_MSG_TRADESKILLS','TrackGems')
+	self:RegisterEvent('CHAT_MSG_LOOT','TrackGems')
+	self:RegisterEvent('CHAT_MSG_OPENING','TrackGems')
 end
 
 function core:TrackGems(_,message)
