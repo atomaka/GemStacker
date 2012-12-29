@@ -1,4 +1,4 @@
-## Interface: 43000
+## Interface: 50100
 ## Title: GemStacker
 ## Version: @project-version@
 ## Author: Gaffer
